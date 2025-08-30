@@ -15,8 +15,8 @@
 ### 1. リポジトリをクローン
 
 ```bash
-git clone https://github.com/your-username/nyapass.git
-cd nyapass
+git clone https://github.com/hirofumikanda/openstreetmap-geocrawler.git
+cd openstreetmap-geocrawler
 ````
 
 ### 2. 依存パッケージをインストール
@@ -25,28 +25,48 @@ cd nyapass
 npm install
 ```
 
+
 ### 3. スクリプトを実行
 
 ```bash
+# デフォルト（openstreetmap.geojson に出力）
 node index.js
+
+# 出力ファイル名を指定（例: shops.geojson に出力）
+node index.js -o shops.geojson
+
+# クエリファイル名を指定（例: shops.overpass に出力）
+node index.js -q shops.overpass
 ```
 
-実行後、`cafes.geojson` というファイルが作成されます（内容は `index.js` 内のクエリに依存します）。
+実行後、指定したファイル名（デフォルトは `openstreetmap.geojson`）でGeoJSONファイルが作成されます（内容はクエリファイル（デフォルト: `query.overpass`）に依存します）。
+
 
 
 ## クエリのカスタマイズ
 
-`index.js` の `overpassQuery` 定数を編集することで、取得対象のデータや範囲を変更できます。
+取得対象のデータや範囲は、外部クエリファイル（デフォルト: `query.overpass`）を編集することで変更できます。
 
-例：公衆トイレの取得に変更する場合
+例：公衆トイレの取得クエリ（`query.overpass` の内容例）
 
-```javascript
-const overpassQuery = `
+```overpassql
 [out:json][timeout:25];
 node["amenity"="toilets"](35.681,139.767,35.689,139.775);
 out body;
-`;
 ```
+
+クエリファイルは `-q <ファイル名>` で指定できます（省略時は `query.overpass`）。
+
+### クエリに関する参考サイト
+- [Overpass API/Overpass API by Example](https://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_API_by_Example)
+- [taginfo](https://taginfo.openstreetmap.org/)
+
+
+
+## コマンドラインオプション
+
+- `-q <クエリファイル>` : Overpass QL クエリファイルを指定（省略時は `query.overpass`）
+- `-o <ファイル名>` : 出力するGeoJSONファイル名を指定（省略時は `openstreetmap.geojson`）
 
 ## 使用しているライブラリ
 
